@@ -14,6 +14,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +34,7 @@ fun MainScreen(
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     var searchQuery by remember { mutableStateOf(uiState.query) }
+    var previousQuery by rememberSaveable { mutableStateOf(uiState.query) }
     val gridState = rememberLazyStaggeredGridState()
     val shouldLoadMore by remember {
         derivedStateOf {
@@ -46,6 +48,13 @@ fun MainScreen(
     LaunchedEffect(shouldLoadMore) {
         if (shouldLoadMore && !uiState.isLoadingMore && !uiState.isLoadingInitial) {
             viewModel.loadNextPage()
+        }
+    }
+
+    LaunchedEffect(uiState.query) {
+        if (previousQuery != uiState.query) {
+            gridState.scrollToItem(0)
+            previousQuery = uiState.query
         }
     }
 
