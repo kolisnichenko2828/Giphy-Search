@@ -1,9 +1,9 @@
 package com.kolisnichenko2828.giphysearch.network
 
 import android.util.Log
-import coil3.network.HttpException
 import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
 import okio.IOException
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class GiphyRepository @Inject constructor(
@@ -48,10 +48,12 @@ class GiphyRepository @Inject constructor(
         } catch (_: IOException) {
             return Result.failure(Exception("Check network connection"))
         } catch (e: HttpException) {
-            return Result.failure(Exception("Server error: ${e.cause}"))
+            if (e.code() == 429) {
+                return Result.failure(Exception("Rate limit exceeded. Try again later"))
+            }
+            return Result.failure(Exception("HTTP error: ${e.code()}"))
         } catch (e: Exception) {
-            Log.d("error", e.message.toString())
-            return Result.failure(Exception("Unknown error"))
+            return Result.failure(Exception("Error: ${e.javaClass.simpleName} / ${e.message}"))
         }
     }
 }
