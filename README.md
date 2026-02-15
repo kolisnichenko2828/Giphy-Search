@@ -1,4 +1,4 @@
-<h1 align="center">Crypto Monitor</h1>
+<h1 align="center">Giphy Search</h1>
 
 **Giphy Search** is an application for searching and exploring GIF animations powered by Giphy API. The project is built with a strong focus on Clean Architecture, smooth UX, and robust fault tolerance.
 
