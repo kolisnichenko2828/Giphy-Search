@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Giphy Search</string>
+
+    <string name="search_placeholder">Search GIF...</string>
+    <string name="trending_title">Trending 🔥</string>
+    <string name="icon_search_content_description">Search icon</string>
+    <string name="icon_clear_content_description">Clear search</string>
+
+    <string name="state_nothing_found">Nothing found</string>
+
+    <string name="error_network">Network error</string>
+    <string name="action_retry">Retry</string>
+
+    <string name="error_full_screen_title">Could not load</string>
+    <string name="action_refresh">Retry</string>
+    <string name="icon_warning_content_description">Warning icon</string>
+
+    <string name="action_back">Back</string>
+    <string name="full_screen_gif_content_description">Fullscreen GIF</string>
+</resources>
