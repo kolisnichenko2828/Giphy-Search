@@ -42,7 +42,7 @@
 2. **Open the project in Android Studio.**
 3. **Add API Key:**
    * Get your key from [Giphy API](https://developers.giphy.com).
-   * Add it to your secrets.properties file:
+   * Add it to your local.properties file:
    ```properties
    GIPHY_API=YOUR_API_KEY
    ```

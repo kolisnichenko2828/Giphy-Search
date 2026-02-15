@@ -9,7 +9,7 @@ plugins {
 }
 
 val localProps = Properties()
-val localPropertiesFile = File(rootProject.rootDir,"secrets.properties")
+val localPropertiesFile = File(rootProject.rootDir,"local.properties")
 if (localPropertiesFile.exists() && localPropertiesFile.isFile) {
     localPropertiesFile.inputStream().use {
         localProps.load(it)
