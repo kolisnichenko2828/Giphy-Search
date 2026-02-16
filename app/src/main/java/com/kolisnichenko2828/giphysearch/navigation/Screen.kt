@@ -1,10 +1,11 @@
 package com.kolisnichenko2828.giphysearch.navigation
 
-import kotlinx.serialization.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-sealed interface Screen {
-    @Serializable
+sealed interface Screen : Parcelable {
+    @Parcelize
     data object MainScreen : Screen
-    @Serializable
+    @Parcelize
     data class GifScreen(val originalUrl: String) : Screen
 }
