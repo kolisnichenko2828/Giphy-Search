@@ -108,7 +108,7 @@ class MainViewModel @Inject constructor(
 
             _state.update {
                 it.copy(
-                    gifs = it.gifs + gifs,
+                    gifs = (it.gifs + gifs).distinctBy { item -> item.id },
                     isLoadingInitial = false,
                     isLoadingMore = false,
                     isEndReached = gifs.size < PAGE_SIZE
