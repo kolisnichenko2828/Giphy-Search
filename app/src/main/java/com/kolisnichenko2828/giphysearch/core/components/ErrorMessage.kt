@@ -47,10 +47,10 @@ fun ErrorMessage(
         Button(onClick = onRetry) {
             Icon(
                 painter = painterResource(R.drawable.refresh_24px),
-                contentDescription = "Retry",
+                contentDescription = stringResource(R.string.action_retry),
                 modifier = Modifier.padding(end = 8.dp)
             )
-            Text(text = "Retry")
+            Text(text = stringResource(R.string.action_retry))
         }
     }
 }

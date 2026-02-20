@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kolisnichenko2828.giphysearch.network.GiphyRepository
 import com.kolisnichenko2828.giphysearch.screens.main.states.MainScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -115,6 +116,10 @@ class MainViewModel @Inject constructor(
                 )
             }
         }.onFailure { error ->
+            if (error is CancellationException) {
+                return@onFailure
+            }
+
             _state.update {
                 it.copy(
                     isLoadingInitial = false,

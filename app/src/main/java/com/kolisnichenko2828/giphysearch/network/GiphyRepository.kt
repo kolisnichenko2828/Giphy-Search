@@ -1,5 +1,6 @@
 package com.kolisnichenko2828.giphysearch.network
 
+import android.util.Log
 import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
 import okio.IOException
 import retrofit2.HttpException
@@ -30,6 +31,7 @@ class GiphyRepository @Inject constructor(
             }
             return Result.failure(Exception("HTTP error: ${e.code()}"))
         } catch (e: Exception) {
+            Log.d("error", e.message ?: "unknown")
             return Result.failure(Exception("Error: ${e.javaClass.simpleName} / ${e.message}"))
         }
     }
