@@ -1,62 +1,28 @@
 package com.kolisnichenko2828.giphysearch.network
 
-import android.util.Log
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
-import okio.IOException
-import retrofit2.HttpException
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GiphyRepository @Inject constructor(
     private val api: GiphyApi
 ) {
-    suspend fun searchGifs(
-        query: String,
-        limit: Int,
-        offset: Int
-    ): Result<List<GifItemState>> {
-        try {
-            val responseDto = api.searchGifs(
-                query = query,
-                limit = limit,
-                offset = offset
-            )
-
-            val gifStateList = responseDto.data.map { it.toItemState() }
-            return Result.success(gifStateList)
-        } catch (_: IOException) {
-            return Result.failure(Exception("Check network connection"))
-        } catch (e: HttpException) {
-            if (e.code() == 429) {
-                return Result.failure(Exception("Rate limit exceeded. Try again later"))
+    fun getGifs(query: String): Flow<PagingData<GifItemState>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 25,
+                prefetchDistance = 10,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                GiphyPagingSource(
+                    api = api,
+                    query = query
+                )
             }
-            return Result.failure(Exception("HTTP error: ${e.code()}"))
-        } catch (e: Exception) {
-            Log.d("error", e.message ?: "unknown")
-            return Result.failure(Exception("Error: ${e.javaClass.simpleName} / ${e.message}"))
-        }
-    }
-
-    suspend fun getTrendingGifs(
-        limit: Int,
-        offset: Int
-    ): Result<List<GifItemState>> {
-        try {
-            val responseDto = api.getTrendingGifs(
-                limit = limit,
-                offset = offset
-            )
-
-            val gifStateList = responseDto.data.map { it.toItemState() }
-            return Result.success(gifStateList)
-        } catch (_: IOException) {
-            return Result.failure(Exception("Check network connection"))
-        } catch (e: HttpException) {
-            if (e.code() == 429) {
-                return Result.failure(Exception("Rate limit exceeded. Try again later"))
-            }
-            return Result.failure(Exception("HTTP error: ${e.code()}"))
-        } catch (e: Exception) {
-            return Result.failure(Exception("Error: ${e.javaClass.simpleName} / ${e.message}"))
-        }
+        ).flow
     }
 }

@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -20,19 +19,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import com.kolisnichenko2828.giphysearch.R
 import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
 
 @Composable
 fun GifsGrid(
-    gifs: List<GifItemState>,
+    gifs: LazyPagingItems<GifItemState>,
     gridState: LazyStaggeredGridState,
-    isLoadingMore: Boolean,
     onGifClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    errorMessage: String?,
-    onRetryClick: () -> Unit
 ) {
     LazyVerticalStaggeredGrid(
         state = gridState,
@@ -43,39 +42,48 @@ fun GifsGrid(
         modifier = modifier.fillMaxSize()
     ) {
         items(
-            items = gifs,
-            key = { gif -> gif.id }
-        ) { gif ->
-            GifItem(
-                gif = gif,
-                onClick = { onGifClick(gif.originalUrl) }
-            )
-        }
-        if (isLoadingMore) {
-            item(
-                span = StaggeredGridItemSpan.FullLine
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
+            count = gifs.itemCount,
+            key = { index ->
+                val gif = gifs[index]
+                if (gif != null) "${gif.id}_$index" else "$index"
             }
-        } else if (errorMessage != null && gifs.isNotEmpty()) {
-            item(span = StaggeredGridItemSpan.FullLine) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = errorMessage,
-                        color = MaterialTheme.colorScheme.error
-                    )
-                    Button(
-                        onClick = onRetryClick
+        ) { index ->
+            val gif = gifs[index]
+            if (gif != null) {
+                GifItem(
+                    gif = gif,
+                    onClick = { onGifClick(gif.originalUrl) }
+                )
+            }
+        }
+        when (val appendState = gifs.loadState.append) {
+            is LoadState.Loading -> {
+                item(span = StaggeredGridItemSpan.FullLine) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text(stringResource(R.string.action_retry))
+                        CircularProgressIndicator()
                     }
                 }
             }
+            is LoadState.Error -> {
+                item(span = StaggeredGridItemSpan.FullLine) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = appendState.error.localizedMessage ?: stringResource(R.string.unknown_error),
+                            color = MaterialTheme.colorScheme.error,
+                            textAlign = TextAlign.Center
+                        )
+                        Button(
+                            onClick = gifs::retry
+                        ) {
+                            Text(stringResource(R.string.action_retry))
+                        }
+                    }
+                }
+            }
+            is LoadState.NotLoading -> Unit
         }
     }
 }

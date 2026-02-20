@@ -8,6 +8,7 @@
 
     <string name="state_nothing_found">Nothing found</string>
 
+    <string name="unknown_error">Unknown error</string>
     <string name="error_network">Network error</string>
     <string name="action_retry">Retry</string>
 

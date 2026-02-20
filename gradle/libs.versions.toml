@@ -26,6 +26,9 @@ retrofit2KotlinxSerializationConverter = "1.0.0"
 # tests
 mockk = "1.14.9"
 kotlinxCoroutinesTest = "1.10.2"
+# paging 3
+pagingRuntime = "3.4.1"
+pagingTesting = "3.4.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -66,6 +69,10 @@ androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", versi
 # tests
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+androidx-paging-testing = { module = "androidx.paging:paging-testing", version.ref = "pagingTesting" }
+# paging 3
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingRuntime" }
+androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingRuntime" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

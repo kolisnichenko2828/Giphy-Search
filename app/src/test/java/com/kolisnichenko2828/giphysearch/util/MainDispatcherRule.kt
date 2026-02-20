@@ -1,4 +1,4 @@
-package com.kolisnichenko2828.giphysearch.screens.util
+package com.kolisnichenko2828.giphysearch.util
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
