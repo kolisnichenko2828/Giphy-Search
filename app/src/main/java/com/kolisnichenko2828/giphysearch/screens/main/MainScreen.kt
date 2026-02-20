@@ -11,6 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,11 +34,25 @@ fun MainScreen(
     onGifClick: (String) -> Unit
 ) {
     val query by viewModel.query.collectAsStateWithLifecycle()
+    var previousQuery by rememberSaveable { mutableStateOf(query) }
+    var displayedQuery by rememberSaveable { mutableStateOf(query) }
+    var shouldScrollToTop by remember { mutableStateOf(false) }
     val gifsPagingItems = viewModel.gifsFlow.collectAsLazyPagingItems()
     val gridState = rememberLazyStaggeredGridState()
 
     LaunchedEffect(query) {
-        gridState.scrollToItem(0)
+        if (previousQuery != query) {
+            shouldScrollToTop = true
+            previousQuery = query
+        }
+    }
+
+    LaunchedEffect(gifsPagingItems.loadState.refresh) {
+        if (shouldScrollToTop) {
+            gridState.scrollToItem(0)
+            shouldScrollToTop = false
+            displayedQuery = query
+        }
     }
 
     Column(
@@ -44,7 +62,7 @@ fun MainScreen(
             query = query,
             onQueryChange = viewModel::searchGifs
         )
-        if (query.isBlank() && gifsPagingItems.itemCount > 0) {
+        if (displayedQuery.isBlank() && gifsPagingItems.itemCount > 0) {
             Text(
                 text = stringResource(R.string.trending_title),
                 style = MaterialTheme.typography.titleMedium,
