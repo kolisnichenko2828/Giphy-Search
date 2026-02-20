@@ -15,7 +15,7 @@
 * **SDK:** API Level 29+
 
 ### 🚀 Features
-* **Seamless Scrolling (Pre-fetching):** Pagination is triggered 10 items before reaching the end of the list. On a stable connection, the user enjoys an infinite scroll without ever seeing a loading spinner.
+* **Seamless Scrolling (Pre-fetching):** Pagination is triggered 10 items before reaching the end of the list. On a stable connection, the user enjoys an infinite scroll without ever seeing a loading spinner. Powered by Jetpack Paging 3
 * **Dynamic Grid (Staggered Grid):** Image cards pre-calculate their aspectRatio directly from the API response. This completely eliminates layout shifts while images are loading.
 * **Custom Shimmer Effect:** A custom-built Jetpack Compose shimmer animation (zero third-party libraries) that perfectly matches the shape and size of the upcoming GIF.
 * **Fault Tolerance:** Features error states on startup and graceful Retry buttons for network drops during pagination or full-screen GIF viewing.
@@ -26,7 +26,8 @@
 - **UI:** Jetpack Compose
 - **Architecture:** Clean Architecture + MVVM + UDF (Unidirectional Data Flow)
 - **Concurrency:** Kotlin Coroutines & Flow (StateFlow)
-- **Network:** Retrofit 2 + OkHttp3 (Custom Interceptor for API key injection)
+- **Network:** Retrofit 3 + OkHttp3 (Custom Interceptor for API key injection)
+- **Pagination:** Jetpack Paging 3
 - **JSON Parsing:** kotlinx.serialization
 - **Image Loading:** Coil 3 (with Crossfade and onLoading/onError state handling)
 - **Dependency Injection:** Dagger Hilt
