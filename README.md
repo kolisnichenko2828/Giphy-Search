@@ -5,9 +5,9 @@
 ### 📱 Screenshots
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/8df6249c-03f4-4806-ae12-c754d8f5e6c5" width="200" />
-  <img src="https://github.com/user-attachments/assets/a16eb63d-87d2-46cd-9c80-db9ce8b40ea5" width="200" />
-  <img src="https://github.com/user-attachments/assets/41fd7be9-21eb-4951-ae63-744cfd3908e7" width="200" />
+  <img src="https://github.com/user-attachments/assets/73b941d3-ecf5-444c-b447-5f9ee4334fd5" width="200" />
+  <img src="https://github.com/user-attachments/assets/eaac190d-7a41-4620-bdf2-4ee240851f31" width="200" />
+  <img src="https://github.com/user-attachments/assets/4f885471-ac7f-483a-97f3-319184b1043f" width="200" />
 </p>
 
 ### ✨ Requirements
