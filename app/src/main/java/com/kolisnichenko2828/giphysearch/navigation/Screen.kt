@@ -7,5 +7,5 @@ sealed interface Screen : Parcelable {
     @Parcelize
     data object MainScreen : Screen
     @Parcelize
-    data class GifScreen(val originalUrl: String) : Screen
+    data class GifScreen(val initialIndex: Int) : Screen
 }

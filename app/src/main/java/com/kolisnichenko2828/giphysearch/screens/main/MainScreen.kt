@@ -30,8 +30,8 @@ import com.kolisnichenko2828.giphysearch.screens.main.components.SearchInput
 
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel = hiltViewModel(),
-    onGifClick: (String) -> Unit
+    viewModel: MainViewModel,
+    onGifClick: (Int) -> Unit
 ) {
     val query by viewModel.query.collectAsStateWithLifecycle()
     var previousQuery by rememberSaveable { mutableStateOf(query) }

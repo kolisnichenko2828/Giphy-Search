@@ -30,7 +30,7 @@ import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
 fun GifsGrid(
     gifs: LazyPagingItems<GifItemState>,
     gridState: LazyStaggeredGridState,
-    onGifClick: (String) -> Unit,
+    onGifClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalStaggeredGrid(
@@ -52,7 +52,7 @@ fun GifsGrid(
             if (gif != null) {
                 GifItem(
                     gif = gif,
-                    onClick = { onGifClick(gif.originalUrl) }
+                    onClick = { onGifClick(index) }
                 )
             }
         }
