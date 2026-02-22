@@ -33,6 +33,8 @@ fun GifsGrid(
     onGifClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val sharedShimmerOffset = rememberSharedShimmerState()
+
     LazyVerticalStaggeredGrid(
         state = gridState,
         columns = StaggeredGridCells.Fixed(2),
@@ -52,6 +54,7 @@ fun GifsGrid(
             if (gif != null) {
                 GifItem(
                     gif = gif,
+                    sharedShimmerOffset = sharedShimmerOffset,
                     onClick = { onGifClick(index) }
                 )
             }

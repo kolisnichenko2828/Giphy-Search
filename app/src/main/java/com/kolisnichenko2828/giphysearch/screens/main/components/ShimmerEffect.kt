@@ -6,36 +6,52 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
-fun Modifier.shimmerEffect(): Modifier = composed {
-    val transition = rememberInfiniteTransition(label = "shimmer_transition")
+fun Modifier.shimmerEffect(
+    sharedOffset: State<Float>,
+    showShimmer: Boolean = true
+): Modifier {
+    if (!showShimmer) return this
 
-    val translateAnim by transition.animateFloat(
+    return this.drawBehind {
+        val offset = sharedOffset.value
+
+        val brush = Brush.linearGradient(
+            colors = ShimmerColors,
+            start = Offset.Zero,
+            end = Offset(x = offset, y = offset)
+        )
+        drawRect(brush = brush)
+    }
+}
+
+private val ShimmerColors = listOf(
+    Color.LightGray.copy(alpha = 0.6f),
+    Color.LightGray.copy(alpha = 0.2f),
+    Color.LightGray.copy(alpha = 0.6f)
+)
+
+@Composable
+fun rememberSharedShimmerState(): State<Float> {
+    val transition = rememberInfiniteTransition("shared_shimmer_transition")
+
+    return transition.animateFloat(
         initialValue = 0f,
         targetValue = 1000f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1000, easing = FastOutSlowInEasing),
+            animation = tween(
+                durationMillis = 1000,
+                easing = FastOutSlowInEasing
+            ),
             repeatMode = RepeatMode.Restart
         ),
-        label = "shimmer_effect"
+        label = "shared_shimmer_effect"
     )
-
-    val brush = Brush.linearGradient(
-        colors = listOf(
-            Color.LightGray.copy(alpha = 0.6f),
-            Color.LightGray.copy(alpha = 0.2f),
-            Color.LightGray.copy(alpha = 0.6f)
-        ),
-        start = Offset(x = 0f, y = 0f),
-        end = Offset(x = translateAnim, y = translateAnim)
-    )
-
-    this.background(brush)
 }
