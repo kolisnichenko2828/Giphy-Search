@@ -12,6 +12,11 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -30,20 +35,10 @@ fun SearchInput(
     modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
-    val view = LocalView.current
+    val isKeyboardVisible by rememberIsKeyboardVisible()
 
-    DisposableEffect(view) {
-        val listener = ViewTreeObserver.OnGlobalLayoutListener {
-            val insets = ViewCompat.getRootWindowInsets(view)
-            val isKeyboardVisible = insets?.isVisible(WindowInsetsCompat.Type.ime())
-            isKeyboardVisible?.let { if (!it) focusManager.clearFocus() }
-        }
-
-        view.viewTreeObserver.addOnGlobalLayoutListener(listener)
-
-        onDispose {
-            view.viewTreeObserver.removeOnGlobalLayoutListener(listener)
-        }
+    LaunchedEffect(isKeyboardVisible) {
+        if (!isKeyboardVisible) focusManager.clearFocus()
     }
 
     OutlinedTextField(
@@ -76,4 +71,26 @@ fun SearchInput(
             unfocusedBorderColor = Color.LightGray
         )
     )
+}
+
+@Composable
+fun rememberIsKeyboardVisible(): State<Boolean> {
+    val view = LocalView.current
+    val isKeyboardVisible = remember { mutableStateOf(false) }
+
+    DisposableEffect(view) {
+        val listener = ViewTreeObserver.OnGlobalLayoutListener {
+            val insets = ViewCompat.getRootWindowInsets(view)
+            val isVisible = insets?.isVisible(WindowInsetsCompat.Type.ime()) ?: false
+            isKeyboardVisible.value = isVisible
+        }
+
+        view.viewTreeObserver.addOnGlobalLayoutListener(listener)
+
+        onDispose {
+            view.viewTreeObserver.removeOnGlobalLayoutListener(listener)
+        }
+    }
+
+    return isKeyboardVisible
 }
