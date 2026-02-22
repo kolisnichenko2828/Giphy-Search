@@ -9,23 +9,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import coil3.compose.AsyncImagePainter
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
-import coil3.request.ImageRequest
-import coil3.request.crossfade
 import com.kolisnichenko2828.giphysearch.R
 import com.kolisnichenko2828.giphysearch.core.components.ErrorMessage
 
 @Composable
 fun GifPage(originalUrl: String) {
     SubcomposeAsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(originalUrl)
-            .crossfade(500)
-            .build(),
+        model = originalUrl,
         contentDescription = stringResource(R.string.full_screen_gif_content_description),
         contentScale = ContentScale.Fit,
         modifier = Modifier.fillMaxSize(),
