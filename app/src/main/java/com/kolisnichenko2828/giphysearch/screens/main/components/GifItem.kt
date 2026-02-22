@@ -16,12 +16,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImagePainter
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
-import coil3.request.ImageRequest
 import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
 
 @Composable
@@ -39,9 +37,7 @@ fun GifItem(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         SubcomposeAsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(gif.previewUrl)
-                .build(),
+            model = gif.previewUrl,
             contentDescription = gif.title,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillWidth
