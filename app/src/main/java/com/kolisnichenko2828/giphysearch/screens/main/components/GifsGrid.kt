@@ -16,6 +16,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -31,10 +32,12 @@ import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
 fun GifsGrid(
     gifs: LazyPagingItems<GifItemState>,
     gridState: LazyStaggeredGridState,
+    isNetworkAvailable: State<Boolean>,
     onGifClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val sharedShimmerOffset = rememberSharedShimmerState()
+    val appendState = gifs.loadState.append
 
     LazyVerticalStaggeredGrid(
         state = gridState,
@@ -47,7 +50,7 @@ fun GifsGrid(
         items(
             count = gifs.itemCount,
             key = { index ->
-                val gif = gifs[index]
+                val gif = gifs.peek(index)
                 if (gif != null) "${gif.id}_$index" else "$index"
             }
         ) { index ->
@@ -56,11 +59,12 @@ fun GifsGrid(
                 GifItem(
                     gif = gif,
                     sharedShimmerOffset = sharedShimmerOffset,
+                    isNetworkAvailable = isNetworkAvailable,
                     onClick = { onGifClick(index) }
                 )
             }
         }
-        when (val appendState = gifs.loadState.append) {
+        when (appendState) {
             is LoadState.Loading -> {
                 item(span = StaggeredGridItemSpan.FullLine) {
                     Box(
@@ -73,14 +77,17 @@ fun GifsGrid(
             }
             is LoadState.Error -> {
                 item(span = StaggeredGridItemSpan.FullLine) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         Text(
                             text = appendState.error.toUserReadableMessage(),
                             color = MaterialTheme.colorScheme.error,
                             textAlign = TextAlign.Center
                         )
                         Button(
-                            onClick = gifs::retry
+                            onClick = { gifs.retry() }
                         ) {
                             Text(stringResource(R.string.action_retry))
                         }

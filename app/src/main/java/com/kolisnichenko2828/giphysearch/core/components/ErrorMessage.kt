@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import coil3.network.HttpException
 import com.kolisnichenko2828.giphysearch.R
 import com.kolisnichenko2828.giphysearch.core.error.AppException
 
@@ -64,6 +65,7 @@ fun Throwable.toUserReadableMessage(): String {
         is AppException.NoInternetConnection -> stringResource(R.string.error_no_internet)
         is AppException.RateLimitExceeded -> stringResource(R.string.error_rate_limit)
         is AppException.ServerError -> stringResource(R.string.error_server)
+        is HttpException -> stringResource(R.string.error_no_internet)
         else -> stringResource(R.string.error_unknown)
     }
 }

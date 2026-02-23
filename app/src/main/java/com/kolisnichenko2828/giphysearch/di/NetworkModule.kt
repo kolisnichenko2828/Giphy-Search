@@ -1,6 +1,7 @@
 package com.kolisnichenko2828.giphysearch.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.kolisnichenko2828.giphysearch.BuildConfig
 import com.kolisnichenko2828.giphysearch.network.GiphyApi
 import com.kolisnichenko2828.giphysearch.network.GiphyApiKeyInterceptor
 import com.kolisnichenko2828.giphysearch.network.GiphyRepository
@@ -11,6 +12,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -22,9 +24,17 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
+        val builder = OkHttpClient.Builder()
             .addInterceptor(GiphyApiKeyInterceptor())
-            .build()
+
+        if (BuildConfig.DEBUG) {
+            val loggingInterceptor = HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.HEADERS
+            }
+            builder.addInterceptor(loggingInterceptor)
+        }
+
+        return builder.build()
     }
 
     @Provides

@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,6 +27,7 @@ import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
 fun GifItem(
     gif: GifItemState,
     sharedShimmerOffset: State<Float>,
+    isNetworkAvailable: State<Boolean>,
     onClick: () -> Unit
 ) {
     Card(
@@ -43,6 +45,13 @@ fun GifItem(
             contentScale = ContentScale.FillWidth
         ) {
             val painterState by painter.state.collectAsState()
+
+            LaunchedEffect(isNetworkAvailable.value) {
+                val isError = painterState is AsyncImagePainter.State.Error
+                if (isNetworkAvailable.value && isError) {
+                    painter.restart()
+                }
+            }
 
             Crossfade(
                 targetState = painterState,

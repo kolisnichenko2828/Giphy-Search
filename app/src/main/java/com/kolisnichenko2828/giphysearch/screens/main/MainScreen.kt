@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ import com.kolisnichenko2828.giphysearch.screens.main.components.SearchInput
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
+    isNetworkAvailable: State<Boolean>,
     onGifClick: (Int) -> Unit
 ) {
     val query by viewModel.query.collectAsStateWithLifecycle()
@@ -39,6 +41,16 @@ fun MainScreen(
     var shouldScrollToTop by remember { mutableStateOf(false) }
     val gifsPagingItems = viewModel.gifsFlow.collectAsLazyPagingItems()
     val gridState = rememberLazyStaggeredGridState()
+
+    LaunchedEffect(isNetworkAvailable.value) {
+        if (isNetworkAvailable.value) {
+            val refreshError = gifsPagingItems.loadState.refresh is LoadState.Error
+            val appendError = gifsPagingItems.loadState.append is LoadState.Error
+            if (refreshError || appendError) {
+                gifsPagingItems.retry()
+            }
+        }
+    }
 
     LaunchedEffect(query) {
         if (previousQuery != query) {
@@ -60,7 +72,7 @@ fun MainScreen(
     ) {
         SearchInput(
             query = query,
-            onQueryChange = viewModel::searchGifs
+            onQueryChange = { viewModel.searchGifs(it) }
         )
         if (displayedQuery.isBlank() && gifsPagingItems.itemCount > 0) {
             Text(
@@ -80,7 +92,7 @@ fun MainScreen(
                 is LoadState.Error -> {
                     ErrorMessage(
                         errorMessage = refreshState.error.toUserReadableMessage(),
-                        onRetry = gifsPagingItems::retry
+                        onRetry = { gifsPagingItems.retry() }
                     )
                 }
                 is LoadState.NotLoading -> {
@@ -93,6 +105,7 @@ fun MainScreen(
                         GifsGrid(
                             gifs = gifsPagingItems,
                             gridState = gridState,
+                            isNetworkAvailable = isNetworkAvailable,
                             onGifClick = onGifClick,
                         )
                     }

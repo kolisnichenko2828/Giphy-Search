@@ -8,6 +8,9 @@
 
     <string name="state_nothing_found">Nothing found</string>
 
+    <string name="no_connection">"No connection"</string>
+    <string name="back_online">Back online</string>
+
     <string name="error_unknown">Unknown error</string>
     <string name="error_no_internet">No internet connection.\nPlease check your network.</string>
     <string name="error_rate_limit">Too many requests.\nPlease try again later.</string>

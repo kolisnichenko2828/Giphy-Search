@@ -87,6 +87,7 @@ dependencies {
     // retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.okhttp.logging.interceptor)
     // splash
     implementation(libs.androidx.core.splashscreen)
     // tests
