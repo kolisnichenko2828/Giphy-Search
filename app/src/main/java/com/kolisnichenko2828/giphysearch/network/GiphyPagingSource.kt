@@ -2,7 +2,10 @@ package com.kolisnichenko2828.giphysearch.network
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.kolisnichenko2828.giphysearch.core.error.AppException
 import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
+import retrofit2.HttpException
+import java.io.IOException
 
 class GiphyPagingSource(
     private val api: GiphyApi,
@@ -34,7 +37,18 @@ class GiphyPagingSource(
                 nextKey = if (gifs.isEmpty()) null else offset + limit
             )
         } catch (e: Exception) {
-            return LoadResult.Error(e)
+            val appException = when (e) {
+                is IOException -> AppException.NoInternetConnection(e)
+                is HttpException -> {
+                    when (e.code()) {
+                        429 -> AppException.RateLimitExceeded(e)
+                        in 500..599 -> AppException.ServerError(e)
+                        else -> AppException.Unknown(e)
+                    }
+                }
+                else -> AppException.Unknown(e)
+            }
+            return LoadResult.Error(appException)
         }
     }
 

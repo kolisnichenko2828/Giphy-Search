@@ -46,8 +46,7 @@ fun GifItem(
 
             Crossfade(
                 targetState = painterState,
-                animationSpec = tween(durationMillis = 1000),
-                label = "gif_crossfade"
+                animationSpec = tween(durationMillis = 500)
             ) { state ->
                 when (state) {
                     is AsyncImagePainter.State.Success -> {

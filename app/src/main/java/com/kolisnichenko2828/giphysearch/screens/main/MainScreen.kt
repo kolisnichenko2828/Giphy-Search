@@ -24,6 +24,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.kolisnichenko2828.giphysearch.R
 import com.kolisnichenko2828.giphysearch.core.components.ErrorMessage
+import com.kolisnichenko2828.giphysearch.core.components.toUserReadableMessage
 import com.kolisnichenko2828.giphysearch.screens.main.components.GifsGrid
 import com.kolisnichenko2828.giphysearch.screens.main.components.SearchInput
 
@@ -78,7 +79,7 @@ fun MainScreen(
                 }
                 is LoadState.Error -> {
                     ErrorMessage(
-                        errorMessage = refreshState.error.localizedMessage ?: stringResource(R.string.unknown_error),
+                        errorMessage = refreshState.error.toUserReadableMessage(),
                         onRetry = gifsPagingItems::retry
                     )
                 }

@@ -8,8 +8,10 @@
 
     <string name="state_nothing_found">Nothing found</string>
 
-    <string name="unknown_error">Unknown error</string>
-    <string name="error_network">Network error</string>
+    <string name="error_unknown">Unknown error</string>
+    <string name="error_no_internet">No internet connection.\nPlease check your network.</string>
+    <string name="error_rate_limit">Too many requests.\nPlease try again later.</string>
+    <string name="error_server">Server error occurred.\nPlease try again.</string>
     <string name="action_retry">Retry</string>
 
     <string name="error_full_screen_title">Could not load</string>

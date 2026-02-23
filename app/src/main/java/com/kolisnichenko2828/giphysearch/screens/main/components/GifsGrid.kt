@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.kolisnichenko2828.giphysearch.R
+import com.kolisnichenko2828.giphysearch.core.components.toUserReadableMessage
 import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
 
 @Composable
@@ -74,7 +75,7 @@ fun GifsGrid(
                 item(span = StaggeredGridItemSpan.FullLine) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = appendState.error.localizedMessage ?: stringResource(R.string.unknown_error),
+                            text = appendState.error.toUserReadableMessage(),
                             color = MaterialTheme.colorScheme.error,
                             textAlign = TextAlign.Center
                         )
