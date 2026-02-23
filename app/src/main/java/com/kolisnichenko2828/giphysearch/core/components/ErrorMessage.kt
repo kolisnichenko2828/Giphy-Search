@@ -58,14 +58,3 @@ fun ErrorMessage(
         }
     }
 }
-
-@Composable
-fun Throwable.toUserReadableMessage(): String {
-    return when (this) {
-        is AppException.NoInternetConnection -> stringResource(R.string.error_no_internet)
-        is AppException.RateLimitExceeded -> stringResource(R.string.error_rate_limit)
-        is AppException.ServerError -> stringResource(R.string.error_server)
-        is HttpException -> stringResource(R.string.error_no_internet)
-        else -> stringResource(R.string.error_unknown)
-    }
-}

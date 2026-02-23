@@ -14,7 +14,16 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import javax.inject.Qualifier
 import javax.inject.Singleton
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class BaseOkHttpClient
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class RetrofitOkHttpClient
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -23,8 +32,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        val builder = OkHttpClient.Builder()
+    @BaseOkHttpClient
+    fun provideBaseOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @RetrofitOkHttpClient
+    fun provideRetrofitOkHttpClient(@BaseOkHttpClient baseClient: OkHttpClient): OkHttpClient {
+        val builder = baseClient
+            .newBuilder()
             .addInterceptor(GiphyApiKeyInterceptor())
 
         if (BuildConfig.DEBUG) {
@@ -39,7 +58,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(@RetrofitOkHttpClient okHttpClient: OkHttpClient): Retrofit {
         val networkJson = Json {
             ignoreUnknownKeys = true
             coerceInputValues = true
