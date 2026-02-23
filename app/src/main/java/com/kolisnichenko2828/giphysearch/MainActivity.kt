@@ -11,14 +11,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kolisnichenko2828.giphysearch.core.components.NetworkStatusBar
+import com.kolisnichenko2828.giphysearch.core.network.LocalNetworkStatus
 import com.kolisnichenko2828.giphysearch.core.theme.GiphySearchTheme
 import com.kolisnichenko2828.giphysearch.navigation.GiphyNavHost
-import com.kolisnichenko2828.giphysearch.screens.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,24 +33,25 @@ class MainActivity : ComponentActivity() {
         setContent {
             GiphySearchTheme {
                 val mainViewModel: MainViewModel = hiltViewModel()
-                val isNetworkAvailable = mainViewModel.isNetworkAvailable.collectAsStateWithLifecycle()
+                val isNetworkAvailable by mainViewModel.isNetworkAvailable.collectAsStateWithLifecycle()
 
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    bottomBar = {
-                        Column {
-                            NetworkStatusBar(isNetworkAvailable)
-                            Spacer(modifier = Modifier.navigationBarsPadding())
+                CompositionLocalProvider(
+                    LocalNetworkStatus provides isNetworkAvailable
+                ) {
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        bottomBar = {
+                            Column {
+                                NetworkStatusBar(isNetworkAvailable)
+                                Spacer(modifier = Modifier.navigationBarsPadding())
+                            }
                         }
-                    }
-                ) { innerPadding ->
-                    Box(
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-                        GiphyNavHost(
-                            mainViewModel = mainViewModel,
-                            isNetworkAvailable = isNetworkAvailable
-                        )
+                    ) { innerPadding ->
+                        Box(
+                            modifier = Modifier.padding(innerPadding)
+                        ) {
+                            GiphyNavHost()
+                        }
                     }
                 }
             }

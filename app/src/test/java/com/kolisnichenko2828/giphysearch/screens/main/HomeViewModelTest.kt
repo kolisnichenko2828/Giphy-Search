@@ -11,7 +11,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
-class MainViewModelTest {
+class HomeViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule(StandardTestDispatcher())
     private val repository: GiphyRepository = mockk(relaxed = true)
@@ -21,7 +21,7 @@ class MainViewModelTest {
     fun `searchGifs should update query stateflow`() = runTest(
         context = mainDispatcherRule.testDispatcher
     ) {
-        val viewModel = MainViewModel(repository)
+        val viewModel = HomeViewModel(repository)
         val searchQuery = "dog"
 
         viewModel.searchGifs(searchQuery)

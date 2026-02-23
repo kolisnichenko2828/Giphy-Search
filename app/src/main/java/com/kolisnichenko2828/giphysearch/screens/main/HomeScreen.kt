@@ -10,7 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,13 +25,13 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.kolisnichenko2828.giphysearch.R
 import com.kolisnichenko2828.giphysearch.core.components.ErrorMessage
 import com.kolisnichenko2828.giphysearch.core.components.toUserReadableMessage
+import com.kolisnichenko2828.giphysearch.core.network.LocalNetworkStatus
 import com.kolisnichenko2828.giphysearch.screens.main.components.GifsGrid
 import com.kolisnichenko2828.giphysearch.screens.main.components.SearchInput
 
 @Composable
-fun MainScreen(
-    viewModel: MainViewModel,
-    isNetworkAvailable: State<Boolean>,
+fun HomeScreen(
+    viewModel: HomeViewModel,
     onGifClick: (Int) -> Unit
 ) {
     val query by viewModel.query.collectAsStateWithLifecycle()
@@ -41,9 +40,10 @@ fun MainScreen(
     var shouldScrollToTop by remember { mutableStateOf(false) }
     val gifsPagingItems = viewModel.gifsFlow.collectAsLazyPagingItems()
     val gridState = rememberLazyStaggeredGridState()
+    val isNetworkAvailable = LocalNetworkStatus.current
 
-    LaunchedEffect(isNetworkAvailable.value) {
-        if (isNetworkAvailable.value) {
+    LaunchedEffect(isNetworkAvailable) {
+        if (isNetworkAvailable) {
             val refreshError = gifsPagingItems.loadState.refresh is LoadState.Error
             val appendError = gifsPagingItems.loadState.append is LoadState.Error
             if (refreshError || appendError) {
@@ -105,7 +105,6 @@ fun MainScreen(
                         GifsGrid(
                             gifs = gifsPagingItems,
                             gridState = gridState,
-                            isNetworkAvailable = isNetworkAvailable,
                             onGifClick = onGifClick,
                         )
                     }

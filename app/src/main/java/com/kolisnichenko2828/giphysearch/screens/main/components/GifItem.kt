@@ -21,15 +21,17 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImagePainter
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
+import com.kolisnichenko2828.giphysearch.core.network.LocalNetworkStatus
 import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
 
 @Composable
 fun GifItem(
     gif: GifItemState,
     sharedShimmerOffset: State<Float>,
-    isNetworkAvailable: State<Boolean>,
     onClick: () -> Unit
 ) {
+    val isNetworkAvailable = LocalNetworkStatus.current
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -46,9 +48,9 @@ fun GifItem(
         ) {
             val painterState by painter.state.collectAsState()
 
-            LaunchedEffect(isNetworkAvailable.value) {
+            LaunchedEffect(isNetworkAvailable) {
                 val isError = painterState is AsyncImagePainter.State.Error
-                if (isNetworkAvailable.value && isError) {
+                if (isNetworkAvailable && isError) {
                     painter.restart()
                 }
             }

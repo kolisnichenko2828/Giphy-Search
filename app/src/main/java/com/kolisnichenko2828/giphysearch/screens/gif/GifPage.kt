@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -18,12 +17,14 @@ import coil3.compose.SubcomposeAsyncImageContent
 import com.kolisnichenko2828.giphysearch.R
 import com.kolisnichenko2828.giphysearch.core.components.ErrorMessage
 import com.kolisnichenko2828.giphysearch.core.components.toUserReadableMessage
+import com.kolisnichenko2828.giphysearch.core.network.LocalNetworkStatus
 
 @Composable
 fun GifPage(
     originalUrl: String,
-    isNetworkAvailable: State<Boolean>
 ) {
+    val isNetworkAvailable = LocalNetworkStatus.current
+
     SubcomposeAsyncImage(
         model = originalUrl,
         contentDescription = stringResource(R.string.full_screen_gif_content_description),
@@ -32,9 +33,9 @@ fun GifPage(
     ) {
         val painterState by painter.state.collectAsState()
 
-        LaunchedEffect(isNetworkAvailable.value) {
+        LaunchedEffect(isNetworkAvailable) {
             val isError = painterState is AsyncImagePainter.State.Error
-            if (isNetworkAvailable.value && isError) {
+            if (isNetworkAvailable && isError) {
                 painter.restart()
             }
         }

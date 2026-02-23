@@ -16,7 +16,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,7 +31,6 @@ import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
 fun GifsGrid(
     gifs: LazyPagingItems<GifItemState>,
     gridState: LazyStaggeredGridState,
-    isNetworkAvailable: State<Boolean>,
     onGifClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -59,7 +57,6 @@ fun GifsGrid(
                 GifItem(
                     gif = gif,
                     sharedShimmerOffset = sharedShimmerOffset,
-                    isNetworkAvailable = isNetworkAvailable,
                     onClick = { onGifClick(index) }
                 )
             }

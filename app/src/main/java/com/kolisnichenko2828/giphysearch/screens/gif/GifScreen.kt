@@ -9,24 +9,21 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import com.kolisnichenko2828.giphysearch.R
-import com.kolisnichenko2828.giphysearch.screens.main.MainViewModel
+import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
 
 @Composable
 fun GifScreen(
     initialIndex: Int,
-    viewModel: MainViewModel,
-    isNetworkAvailable: State<Boolean>,
+    gifs: LazyPagingItems<GifItemState>,
     onBackClick: () -> Unit
 ) {
-    val gifs = viewModel.gifsFlow.collectAsLazyPagingItems()
     val pagerState = rememberPagerState(
         initialPage = initialIndex,
         pageCount = { gifs.itemCount }
@@ -42,10 +39,7 @@ fun GifScreen(
             val gif = gifs[page]
 
             if (gif != null) {
-                GifPage(
-                    originalUrl = gif.originalUrl,
-                    isNetworkAvailable = isNetworkAvailable
-                )
+                GifPage(gif.originalUrl)
             } else {
                 Box(
                     modifier = Modifier.fillMaxSize(),
