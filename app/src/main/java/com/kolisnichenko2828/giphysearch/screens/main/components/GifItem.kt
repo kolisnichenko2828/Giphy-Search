@@ -48,7 +48,7 @@ fun GifItem(
         ) {
             val painterState by painter.state.collectAsState()
 
-            LaunchedEffect(isNetworkAvailable) {
+            LaunchedEffect(isNetworkAvailable, painterState) {
                 val isError = painterState is AsyncImagePainter.State.Error
                 if (isNetworkAvailable && isError) {
                     painter.restart()

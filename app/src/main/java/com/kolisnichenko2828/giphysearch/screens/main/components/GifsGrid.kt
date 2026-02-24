@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.kolisnichenko2828.giphysearch.R
-import com.kolisnichenko2828.giphysearch.core.error.toUserReadableMessage
+import com.kolisnichenko2828.giphysearch.core.components.toUserReadableMessage
 import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
 
 @Composable

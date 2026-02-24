@@ -24,7 +24,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.kolisnichenko2828.giphysearch.R
 import com.kolisnichenko2828.giphysearch.core.components.ErrorMessage
-import com.kolisnichenko2828.giphysearch.core.error.toUserReadableMessage
+import com.kolisnichenko2828.giphysearch.core.components.toUserReadableMessage
 import com.kolisnichenko2828.giphysearch.core.network.LocalNetworkStatus
 import com.kolisnichenko2828.giphysearch.screens.main.components.GifsGrid
 import com.kolisnichenko2828.giphysearch.screens.main.components.SearchInput

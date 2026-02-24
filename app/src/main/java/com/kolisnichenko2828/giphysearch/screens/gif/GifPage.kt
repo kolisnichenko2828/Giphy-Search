@@ -16,7 +16,7 @@ import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import com.kolisnichenko2828.giphysearch.R
 import com.kolisnichenko2828.giphysearch.core.components.ErrorMessage
-import com.kolisnichenko2828.giphysearch.core.error.toUserReadableMessage
+import com.kolisnichenko2828.giphysearch.core.components.toUserReadableMessage
 import com.kolisnichenko2828.giphysearch.core.network.LocalNetworkStatus
 
 @Composable
