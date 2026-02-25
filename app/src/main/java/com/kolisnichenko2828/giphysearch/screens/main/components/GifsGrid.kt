@@ -26,7 +26,9 @@ import androidx.paging.compose.LazyPagingItems
 import com.kolisnichenko2828.giphysearch.R
 import com.kolisnichenko2828.giphysearch.core.components.toUserReadableMessage
 import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
+import kotlinx.coroutines.FlowPreview
 
+@OptIn(FlowPreview::class)
 @Composable
 fun GifsGrid(
     gifs: LazyPagingItems<GifItemState>,
@@ -36,6 +38,11 @@ fun GifsGrid(
 ) {
     val sharedShimmerOffset = rememberSharedShimmerState()
     val appendState = gifs.loadState.append
+
+    GifListPrefetcher(
+        gifs = gifs,
+        gridState = gridState
+    )
 
     LazyVerticalStaggeredGrid(
         state = gridState,

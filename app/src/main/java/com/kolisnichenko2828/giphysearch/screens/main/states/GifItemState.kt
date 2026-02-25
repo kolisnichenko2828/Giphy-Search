@@ -8,5 +8,6 @@ data class GifItemState(
     val title: String,
     val previewUrl: String,
     val originalUrl: String,
+    val stillUrl: String,
     val aspectRatio: Float
 )

@@ -33,6 +33,7 @@ fun GifDto.toItemState(): GifItemState {
         title = this.title?.ifBlank { "No title" } ?: "No title",
         previewUrl = this.images.fixedHeight.url,
         originalUrl = this.images.original.url,
+        stillUrl = this.images.fixedHeightStill.url,
         aspectRatio = ratio
     )
 }
@@ -43,7 +44,9 @@ data class ImagesDto(
     @SerialName("original")
     val original: ImageUrlDto,
     @SerialName("fixed_height")
-    val fixedHeight: ImageUrlDto
+    val fixedHeight: ImageUrlDto,
+    @SerialName("fixed_height_still")
+    val fixedHeightStill: ImageUrlDto
 )
 
 @Keep

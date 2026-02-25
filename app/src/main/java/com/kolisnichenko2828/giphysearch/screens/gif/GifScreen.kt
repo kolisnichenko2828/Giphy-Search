@@ -39,7 +39,11 @@ fun GifScreen(
             val gif = gifs[page]
 
             if (gif != null) {
-                GifPage(gif.originalUrl)
+                GifPage(
+                    title = gif.title,
+                    stillUrl = gif.stillUrl,
+                    originalUrl = gif.originalUrl
+                )
             } else {
                 Box(
                     modifier = Modifier.fillMaxSize(),

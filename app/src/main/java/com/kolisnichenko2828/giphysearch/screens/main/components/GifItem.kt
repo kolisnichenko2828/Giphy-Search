@@ -16,11 +16,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
+import coil3.decode.DataSource
 import com.kolisnichenko2828.giphysearch.core.network.LocalNetworkStatus
 import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
 
@@ -55,19 +58,43 @@ fun GifItem(
                 }
             }
 
-            Crossfade(
-                targetState = painterState,
-                animationSpec = tween(durationMillis = 500)
-            ) { state ->
-                when (state) {
-                    is AsyncImagePainter.State.Success -> {
-                        SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
-                    }
-                    else -> {
-                        Box(modifier = Modifier
-                            .fillMaxSize()
-                            .shimmerEffect(sharedShimmerOffset)
-                        )
+            val isFromCache = painterState.let {
+                if (it is AsyncImagePainter.State.Success) {
+                    it.result.dataSource != DataSource.NETWORK
+                } else {
+                    false
+                }
+            }
+
+            if (isFromCache) {
+                SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
+            } else {
+                Crossfade(
+                    targetState = painterState,
+                    animationSpec = tween(durationMillis = 500)
+                ) { state ->
+                    when (state) {
+                        is AsyncImagePainter.State.Success -> {
+                            SubcomposeAsyncImageContent(modifier = Modifier.fillMaxSize())
+                        }
+
+                        else -> {
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                AsyncImage(
+                                    model = gif.stillUrl,
+                                    contentDescription = null,
+                                    contentScale = ContentScale.FillWidth,
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .blur(radius = 12.dp)
+                                )
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .shimmerEffect(sharedShimmerOffset)
+                                )
+                            }
+                        }
                     }
                 }
             }
