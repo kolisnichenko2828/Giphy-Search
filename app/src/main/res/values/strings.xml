@@ -14,6 +14,7 @@
     <string name="error_unknown">Unknown Error</string>
     <string name="error_no_internet">No internet connection.\nPlease check your network.</string>
     <string name="error_rate_limit">Too many requests.\nPlease try again later.</string>
+    <string name="error_timeout">Request timed out.\nPlease try again.</string>
     <string name="error_server">Server error occurred.\nPlease try again.</string>
     <string name="action_retry">Retry</string>
 

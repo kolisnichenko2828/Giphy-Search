@@ -13,6 +13,7 @@ fun Throwable.toUserReadableMessage(): String {
         is AppException.RateLimitExceeded -> stringResource(R.string.error_rate_limit)
         is AppException.ServerError -> stringResource(R.string.error_server)
         is HttpException -> stringResource(R.string.error_no_internet)
+        is AppException.Timeout -> stringResource(R.string.error_timeout)
         else -> stringResource(R.string.error_unknown)
     }
 }

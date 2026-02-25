@@ -6,6 +6,7 @@ import com.kolisnichenko2828.giphysearch.core.error.AppException
 import com.kolisnichenko2828.giphysearch.screens.main.states.GifItemState
 import retrofit2.HttpException
 import java.io.IOException
+import java.net.SocketTimeoutException
 
 class GiphyPagingSource(
     private val api: GiphyApi,
@@ -38,6 +39,7 @@ class GiphyPagingSource(
             )
         } catch (e: Exception) {
             val appException = when (e) {
+                is SocketTimeoutException -> AppException.Timeout(e)
                 is IOException -> AppException.NoInternetConnection(e)
                 is HttpException -> {
                     when (e.code()) {
